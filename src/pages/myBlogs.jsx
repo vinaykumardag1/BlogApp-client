@@ -34,7 +34,7 @@ const MyBlogs = () => {
     <div>
         <Navbar/>
       {userBlogs.length > 0 ? (
-        userBlogs.map((item) => <Card key={blog._id} blog={item} />)
+        userBlogs.map((item) => <Card key={item._id} blog={item} />)
       ) : (
         <div>No blogs found</div>
       )}
