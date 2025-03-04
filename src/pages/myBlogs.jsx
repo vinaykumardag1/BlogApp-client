@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { toast, ToastContainer } from 'react-toastify';
 import Card from '../components/card';
 import Navbar from '../components/Navbar';
 
 const MyBlogs = () => {
-  const [userBlogs, setUserBlogs] = useState([]);
+  const [userBlogs, setUserBlogs] = useState([]); // Ensure it's an array
   const [loading, setLoading] = useState(true);
-  const id = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId'); // Get logged-in user ID
 
   useEffect(() => {
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
     const getUserBlogs = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/getUserBlogs/${id}`);
-        setUserBlogs(response.data); // Assuming response.data.blogs contains the blogs array
-       console.log(response.data)
+        const response = await axios.get('http://localhost:3000/api/blog');
+        if (Array.isArray(response.data)) {
+          // Filter blogs where the userId in the blog matches the logged-in user
+          const filteredBlogs = response.data.filter(blog => blog.userId === userId);
+          setUserBlogs(filteredBlogs);
+        } else {
+          setUserBlogs([]);
+        }
       } catch (error) {
-        // toast.error(error.response?.data?.message || 'Error fetching blogs');
         console.log(error);
+        setUserBlogs([]);
       } finally {
         setLoading(false);
       }
     };
 
     getUserBlogs();
-  }, [id]);
+  }, [userId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -32,13 +41,12 @@ const MyBlogs = () => {
 
   return (
     <div>
-        <Navbar/>
+      <Navbar />
       {userBlogs.length > 0 ? (
         userBlogs.map((item) => <Card key={item._id} blog={item} />)
       ) : (
         <div>No blogs found</div>
       )}
-     
     </div>
   );
 };
