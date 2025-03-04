@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 
 const Navbar = () => {
   const [userdata, setUserdata] = useState(null);
-  const userId = localStorage.getItem("userId"); // Get userId from local storage
+  const userId = localStorage.getItem("userId");
+  const navigate=useNavigate()
 
   useEffect(() => {
     const userDetail = async () => {
@@ -22,6 +24,8 @@ const Navbar = () => {
   }, [userId]); // Dependency to re-fetch if userId changes
   const Logout=()=>{
     localStorage.clear()
+    window.location.reload()
+    navigate("/")
   }
   return (
     <div className='flex justify-between w-full p-10'>
@@ -39,7 +43,9 @@ const Navbar = () => {
         {userdata && (
           <div className='px-8'>
             <span >HI! {userdata.name}</span>
-            <span className='ml-3 px-4 cursor-pointer text-white bg-red-500 py-2 rounded-4xl' onClick={Logout}>Logout</span>
+            {/* <span >Myblogs</span> */}
+            <Link to="/myblogs">My Blogs</Link>
+            <button className='ml-3 px-4 cursor-pointer text-white bg-red-500 py-2 rounded-4xl' onClick={Logout}>Logout</button>
           </div>
         )}
       </div>

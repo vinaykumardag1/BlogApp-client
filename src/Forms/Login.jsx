@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,16 +25,17 @@ const Login = () => {
                 email: formData.email,
                 password: formData.password,
             });
-            if(response.data.message==="invalid credentials"){
-                toast.warning("invalid credentials")
-            }
+            
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userId', response.data.userId);
             toast.success(response.data.message);
             navigate('/');
         } catch (error) {
+            if(error.response.data.message==="invalid credentials"){
+                toast.warning("invalid credentials")
+            }else{
             toast.error(error.response.data.message || 'An error occurred');
-            // console.error('Login error:', error);
+            }
         } finally {
             setLoading(false);
         }
@@ -84,6 +85,7 @@ const Login = () => {
                     {loading ? 'Loading...' : 'Submit'}
                 </button>
             </form>
+            <ToastContainer/>
         </div>
     );
 };
