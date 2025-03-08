@@ -31,20 +31,23 @@ const Navbar = () => {
     <div className='flex justify-between w-full p-10'>
       <h1>BlogApp</h1>
       <div className='flex gap-4'>
-        <Link to='/'>Home</Link>
+       
         {/* Show Login/Register only if user is NOT logged in */}
         {!userId && (
           <>
+            <Link to='/'>Home</Link>
             <Link to='/login'>Login</Link>
             <Link to='/register'>Register</Link>
           </>
         )}
         {/* Show User Name if logged in */}
         {userdata && (
-          <div className='px-8'>
-            <span >HI! {userdata.name}</span>
+          <div>
+             <Link to='/'>Home</Link>
+           
             {/* <span >Myblogs</span> */}
             <Link to="/myblogs">My Blogs</Link>
+             <span className='px-2'>HI! {userdata.name}</span>
             <button className='ml-3 px-4 cursor-pointer text-white bg-red-500 py-2 rounded-4xl' onClick={Logout}>Logout</button>
           </div>
         )}
