@@ -1,46 +1,48 @@
-import React from 'react';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import Card from "./card";
 
-import {Button} from "@mui/material"
-import Card from './card'
 const BlogData = () => {
   const [blog, setBlog] = useState([]);
-  // const [disabled,setDisabled]=useState(false)
-  
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/blog');
+        const response = await axios.get("http://localhost:3000/api/blog");
         setBlog(response.data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching blog data:", error);
       }
     };
     fetchBlog();
   }, []);
 
-  const user=localStorage.getItem("userId")
-  // if(!user){
-  //   setDis(true)
-  // }
+  const user = localStorage.getItem("userId");
 
   return (
-   
     <div className="p-6 font-sans">
-      <div className="flex justify-end p-5">
-        <Button variant="contained" color="success"
-         href="/createblog"
-         className="text-right px-3.5 py-5 bg-amber-600 text-white rounded-4xl "
-      
-         >Create your Blog</Button>
-        {/* <Link to="/createblog"className="text-right px-3.5 py-5 bg-amber-600 text-white rounded-4xl " >Create your Blog</Link> */}
+      {user && (
+        <div className="flex justify-end p-5">
+          <Button variant="contained" color="success" href="/createblog">
+            Create your Blog
+          </Button>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {blog.map((post) => (
+          <div key={post._id}>
+            <Card blog={post} />
+            <div className="mt-2 text-center">
+              <Link to={`/blogs/${post._id}`} className="text-blue-500 hover:underline">
+                Read more
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
-      
-      {blog.map((blog) => ( 
-        <Card blog={blog} key={blog._id} />
-      ))}
     </div>
   );
 };

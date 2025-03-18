@@ -29,25 +29,29 @@ const Navbar = () => {
   };
 
   return (
-    <div className='flex justify-between w-full p-10'>
-      <h1>BlogApp</h1>
+    <div className='flex justify-between items-center w-full p-6 bg-blue-600 text-white shadow-md'>
+      <h1 className='text-3xl font-bold'>BlogApp</h1>
       <div className='flex gap-4'>
         {/* Show Login/Register only if user is NOT logged in */}
         {!userId && (
-          <div>
-            <Link to='/'>Home</Link>
-            <Link to='/login'>Login</Link>
-            <Link to='/register'>Register</Link>
+          <div className='flex gap-4'>
+            <Link to='/' className='px-3 py-2 rounded hover:bg-blue-700 transition-colors'>Home</Link>
+            <Link to='/login' className='px-3 py-2 rounded hover:bg-blue-700 transition-colors'>Login</Link>
+            <Link to='/register' className='px-3 py-2 rounded hover:bg-blue-700 transition-colors'>Register</Link>
           </div>
         )}
         {/* Show User Name if logged in */}
         {userdata && (
-          <div>
-            <Link to='/'>Home</Link>
-            <Link to="/myblogs" className='px-2'>My Blogs</Link>
-            <span className='px-2'>HI! {userdata.name}</span>
-            
-            <button className='ml-3 px-4 cursor-pointer text-white bg-red-500 py-2 rounded-xl' onClick={Logout}>Logout</button>
+          <div className='flex items-center gap-4'>
+            <Link to='/' className='px-3 py-2 rounded hover:bg-blue-700 transition-colors'>Home</Link>
+            <Link to="/myblogs" className='px-3 py-2 rounded hover:bg-blue-700 transition-colors'>My Blogs</Link>
+            <span className='px-3 py-2 rounded bg-blue-700'>{`Hi, ${userdata.name}`}</span>
+            <button
+              className='ml-3 px-4 py-2 bg-red-500 rounded hover:bg-red-600 transition-colors'
+              onClick={Logout}
+            >
+              Logout
+            </button>
           </div>
         )}
       </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { Button, Modal, TextField } from '@mui/material';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const MyBlogs = () => {
   const [userBlogs, setUserBlogs] = useState([]);
@@ -96,36 +97,53 @@ const MyBlogs = () => {
   return (
     <div>
       <Navbar />
+      <div className="flex justify-end p-5">
+        <Button
+          variant="contained"
+          color="success"
+          href="/createblog"
+          className="text-right px-3.5 py-5 bg-amber-600 text-white rounded-4xl"
+        >
+          Create your Blog
+        </Button>
+      </div>
       {userBlogs.length > 0 ? (
-        userBlogs.map((blog) => (
-          <div key={blog._id} className="flex justify-center items-center bg-gray-100">
-            <div className="w-1/2 border-b overflow-hidden border-gray-300 mb-6 pb-6">
-              <h3 className="text-3xl text-gray-800">{blog.title}</h3>
-              {blog.image && (
-                <img
-                  className="mt-4 w-full h-auto"
-                  src={`http://localhost:3000${blog.image.path}`}
-                  alt={blog.title}
-                />
-              )}
-              <p className="text-lg text-gray-600 mt-4 text-justify">{blog.content}</p>
-              <div className="mt-4 flex gap-4">
-                <button
-                  className="px-4 py-2 bg-blue-500 cursor-pointer text-white rounded"
-                  onClick={() => handleOpen(blog)}
-                >
-                  Update
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 cursor-pointer text-white rounded"
-                  onClick={() => handleDeleteOpen(blog._id)}
-                >
-                  Delete
-                </button>
+        userBlogs.map((blog) => {
+          const paragraphs = blog.content ? blog.content.split("\n") : [];
+          return (
+            <div key={blog._id} className="flex justify-center items-center bg-gray-100">
+              <div className="w-1/2 border-b overflow-hidden border-gray-300 mb-6 pb-6">
+                <h3 className="text-3xl text-gray-800">{blog.title}</h3>
+                {blog.image && (
+                  <img
+                    className="mt-4 w-full h-auto"
+                    src={`http://localhost:3000${blog.image.path}`}
+                    alt={blog.title}
+                  />
+                )}
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index} className="text-lg text-gray-600 mt-4 selection:bg-cyan-400 selection:text-white">
+                    {paragraph}
+                  </p>
+                ))}
+                <div className="mt-4 flex gap-4">
+                  <button
+                    className="flex items-center px-4 py-2 bg-blue-500 cursor-pointer text-white rounded hover:bg-blue-600"
+                    onClick={() => handleOpen(blog)}
+                  >
+                    <FaEdit className="mr-2" /> Update
+                  </button>
+                  <button
+                    className="flex items-center px-4 py-2 bg-red-500 cursor-pointer text-white rounded hover:bg-red-600"
+                    onClick={() => handleDeleteOpen(blog._id)}
+                  >
+                    <FaTrashAlt className="mr-2" /> Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <div>No blogs found</div>
       )}
